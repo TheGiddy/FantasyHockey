@@ -1,0 +1,28 @@
+# Secrets
+oauth2.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Local data cache (top-level only, not fantasy_hockey/data/)
+/data/
+*.parquet
+*.sqlite
+*.db
+
+# OS / IDE
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Outputs
+outputs/
+*.html
+*.csv
+!requirements.csv
