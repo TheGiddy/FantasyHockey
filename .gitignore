@@ -26,3 +26,6 @@ outputs/
 *.html
 *.csv
 !requirements.csv
+
+# Draft Prep fetched data (regenerable via fetch scripts)
+Draft Prep/data/
