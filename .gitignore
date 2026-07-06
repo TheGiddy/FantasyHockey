@@ -29,3 +29,5 @@ outputs/
 
 # Draft Prep fetched data (regenerable via fetch scripts)
 Draft Prep/data/
+# hand-curated model input, keep tracked despite *.csv rule
+!Draft Prep/overrides.csv

@@ -192,6 +192,16 @@ Squeeze victims: see FALLS lists above
 - Decliners/fades: Stamkos (20.4 sh% at 36 — biggest fade on board), Ovechkin (41), Panarin (35, zero bangers), Tavares/Josi/E. Karlsson (36), Crosby (39), Geekie (21.5 sh%), Kucherov cliff-watch (33), Scheifele/Zibanejad (33)
 - Team-change notes from 25-26: Q. Hughes→MIN, Nurse→SJ, Tuch→WSH, Panarin→LA, Dobson→MTL, Trocheck→UTA, Sherwood→SJ, Dorofeyev→NYR, Suzuki stays MTL
 
+## 2026 offseason movement (news sweep 2026-07-05 — now in overrides.csv, merged into model)
+- **Brady Tkachuk → FLA** (3 firsts + a 2nd to OTT; joins Matthew). Still elite in this format (vorp 7.2, #4 available); slight volume haircut on a loaded top-9. **OTT fallout: Cozens' top-6 is safe, Eklund arrives on Stutzle's wing** — TD's Cozens keeper unaffected.
+- **Raddysh → TOR**: his 22G/70P was TBL-PP1-driven; that role is gone. Vorp collapsed 2.30 → 0.29; **trade target DEAD (−0.76 surplus)**.
+- **Larkin trade request from DET** (Dallas favored; Yzerman noncommittal). DeBrincat haircut applied (0.95) → surplus down to +0.23, still positive but lowball-only. **Larkin is TD currency — his value RISES if dealt to DAL; shop him after destination confirms.**
+- **Tuch → WSH** (projected Ovechkin line): improves to −0.15 — still a pass.
+- **Revised trade-target table:** Jarvis +1.23 (but draft-don't-trade — Autodraft can't keep him, no R4–R7 picks), DeBrincat +0.23, everyone else negative. **The pre-draft trade market has mostly dried up; SOG/goalie fixes come from the draft.**
+- Other movers in overrides.csv: Kyrou→WSH, Peterka→BOS (Pastrnak line), Byram→CHI (PP1 w/ Bedard), McTavish→STL 2C, Nemec→CGY, Zuccarello→LAK (Kaprizov loses his winger, 0.97), Trocheck+Lee→UTA (**mild Cooley TOI competition, 0.97**), Carlson→TBL (0.90), Nichushkin→CBJ, Nurse+Trouba→SJS.
+- **Goalie carousel:** Bobrovsky→TOR (Gents' keeper — new team), Markstrom→FLA, Andersen→EDM (tandem w/ Jarry; Andersen is reigning champ — CAR won the Cup), Skinner→WPG, Woll→PHI (behind Vladar), Cossa→UTA. **⚠️ Hellebuyck (our G4): Jets signed Skinner 2yr/$7.5M and a trade is widely expected (BUF loudest suitor). His 58-start/32W projection assumes WPG — treat as volatile until resolved.**
+- 2026 NHL draft: Gavin McKenna projected/went #1 (TOR per mocks) — 2026 draftees are NOT in the model (zero NHL games); rookie fliers need the manual NHLe module.
+
 ## Open items / TODO
 1. Confirm draft order when drawn (late July) — linear, so slot value compounds; Autodraft + ER slots also matter (TD owns their picks)
 2. ~~Verify Hellebuyck status~~ DONE 2026-07-05: projects G4 overall in v2 model — Yahoo top-175 absence was a Yahoo list artifact, not performance

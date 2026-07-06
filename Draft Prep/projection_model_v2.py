@@ -223,8 +223,21 @@ def build_skaters(seasons=None, age_date=None, hist_seasons=None, use_weights=Tr
     rawXG = df.groupby("playerId")["I_F_xGoals"].sum().reindex(out["playerId"]).values
     out["fin"] = ((rawG + 10) / (np.nan_to_num(rawXG) + 10)).clip(0.8, 1.3)
 
+    # manual deployment overrides (offseason moves, line changes — overrides.csv)
+    out["off_mult"] = 1.0
+    if os.path.exists("overrides.csv"):
+        ov = pd.read_csv("overrides.csv")
+        ov["nn"] = ov["name"].map(norm_name)
+        omap = ov.set_index("nn")["off_mult"].to_dict()
+        onote = ov.set_index("nn")["note"].to_dict()
+        nn = out["name"].map(norm_name)
+        out["off_mult"] = nn.map(omap).fillna(1.0)
+        out["ov_note"] = nn.map(onote).fillna("")
+    else:
+        out["ov_note"] = ""
+
     # ---- assemble projections
-    mo = np.array([age_mult_off(a, p) for a, p in zip(out["age"], out["pos"])])
+    mo = np.array([age_mult_off(a, p) for a, p in zip(out["age"], out["pos"])]) * out["off_mult"].values
     mp_ = np.array([age_mult_phys(a) for a in out["age"]])
     hrs = out["toi_pg_proj"] * out["gp_proj"] / 3600
     pphrs = out["ppt_pg_proj"] * out["gp_proj"] / 3600
@@ -254,6 +267,7 @@ def build_skaters(seasons=None, age_date=None, hist_seasons=None, use_weights=Tr
             elif d < -0.02: n.append(f"sh% regress UP ({r['sh_last']:.1%}->{r['sh_proj']:.1%})")
         if r["gp_share_w"] < 0.72 and r["seasons"] > 1: n.append("GP risk")
         if r["age"] >= 33: n.append("age fade applied")
+        if r["ov_note"]: n.append(f"OVERRIDE {r['off_mult']}: {r['ov_note']}")
         notes.append("; ".join(n))
     out["notes"] = notes
 
