@@ -47,7 +47,7 @@ keep_sched = {t: sorted(KEEP_ROUNDS[t]) for t in ORDER}
 
 td_log = []
 g_taken = {t: 0 for t in ORDER}
-for rnd in range(1, 22):
+for rnd in range(1, 21):     # 2026-27: 20-round draft (4D roster change)
     for slot, slot_team in enumerate(ORDER, 1):
         team = OWNER.get((rnd, slot), slot_team)
         if rnd in keep_sched[team]:

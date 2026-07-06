@@ -5,7 +5,7 @@ Python draft prediction tool for Yahoo fantasy hockey. Ranks players for the upc
 ## League
 - **Yahoo ID:** 465.l.2337 — "Winnipeg Jets Adventuring Comp", 8 teams
 - **Format:** Weekly H2H, 10 categories: G, A, PIM, PPP, SOG, HIT, BLK + W, SV%, SHO
-- **Roster:** 3C, 3LW, 3RW, 5D, 2G, 5 BN, 1 IR, 2 IR+ (21 draftable slots)
+- **Roster:** 3C, 3LW, 3RW, 4D, 2G, 5 BN, 1 IR, 2 IR+ (20 draftable slots; changed from 5D/21 slots for 2026-27)
 
 ## Keeper rules
 - Keep 2 rounds earlier than draft round (R8 → kept at R6)

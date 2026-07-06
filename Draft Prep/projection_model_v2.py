@@ -319,14 +319,15 @@ def build_skaters(seasons=None, age_date=None, hist_seasons=None, use_weights=Tr
     def zsum(frame, ref):
         return sum(cw[c] * (frame[c] - ref[c].mean()) / ref[c].std(ddof=0) for c in cats)
     pool["z"] = zsum(pool, pool)
-    ref = pool.nlargest(150, "z")          # draftable pool defines replacement level
+    ref = pool.nlargest(140, "z")          # draftable pool defines replacement level (20-slot rosters)
     pool["z"] = zsum(pool, ref).round(2)
     pool = pool.sort_values("z", ascending=False)
     return pool
 
 # ==================== Yahoo eligibility + positional VORP ====================
-# Roster: 3C/3LW/3RW/5D x8 teams; replacement index = starters + bench share.
-REPL_INDEX = {"C": 30, "LW": 30, "RW": 30, "D": 50}
+# Roster: 3C/3LW/3RW/4D x8 teams (2026-27 change: was 5D; 20 total slots);
+# replacement index = starters + bench share.
+REPL_INDEX = {"C": 30, "LW": 30, "RW": 30, "D": 40}
 MULTIPOS_BONUS = 0.25   # project convention: +0.25 per extra eligible position
 
 def add_yahoo_eligibility(sk):

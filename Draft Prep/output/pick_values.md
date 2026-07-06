@@ -4,38 +4,37 @@
 
 |round|keeper slots in round|expected vorp at TD pick|
 |---|---|---|
-|R1|0|+6.05 **(TD pick)**|
-|R2|0|+3.90 **(TD pick)**|
-|R3|3|+2.85 **(TD pick)**|
-|R4|6|+2.63 **(TD pick)**|
-|R5|1|+2.15 **(TD pick)**|
-|R6|0|+1.51 **(TD pick)**|
-|R7|4|+1.19|
-|R8|5|+0.95 **(TD pick)**|
-|R9|5|+0.82 **(TD pick)**|
-|R10|5|+0.76|
-|R11|1|+0.45|
-|R12|20|+0.78|
-|R13|0|+0.64|
-|R14|5|+0.45|
-|R15|2|+0.27|
-|R16|3|-0.07|
-|R17|3|-0.36|
-|R18|3|-0.47|
-|R19|3|-0.62|
-|R20|0|-0.90|
-|R21|0|-1.08 **(TD pick)**|
+|R1|0|+5.90 **(TD pick)**|
+|R2|0|+3.58 **(TD pick)**|
+|R3|3|+2.53 **(TD pick)**|
+|R4|6|+2.30 **(TD pick)**|
+|R5|1|+2.12 **(TD pick)**|
+|R6|0|+1.30 **(TD pick)**|
+|R7|4|+0.98|
+|R8|5|+0.87 **(TD pick)**|
+|R9|5|+0.79 **(TD pick)**|
+|R10|5|+0.57|
+|R11|1|+0.09|
+|R12|20|+0.65|
+|R13|0|+0.42|
+|R14|5|+0.09|
+|R15|2|-0.09|
+|R16|3|-0.42|
+|R17|3|-0.57|
+|R18|3|-0.84|
+|R19|3|-0.91|
+|R20|0|-1.10|
 
 ## Trade-target surplus (acquire pre-draft, keep with spare pick)
 
 |target|vorp|keep w/ pick|pick's draft value|net surplus (z)|
 |---|---|---|---|---|
-|Seth Jarvis|+3.88|R6|+1.51|**+2.37**|
-|Miro Heiskanen|+2.67|R4|+2.63|**+0.04**|
-|Alex DeBrincat|+2.27|R5|+2.15|**+0.12**|
-|Sebastian Aho|+2.13|R5|+2.15|**-0.02**|
-|Timo Meier|+1.24|R6|+1.51|**-0.27**|
-|Alex Tuch|+1.21|R6|+1.51|**-0.30**|
-|Darren Raddysh|+0.27|R8|+0.95|**-0.68**|
+|Seth Jarvis|+3.97|R6|+1.30|**+2.67**|
+|Alex DeBrincat|+2.30|R5|+2.12|**+0.18**|
+|Miro Heiskanen|+2.23|R4|+2.30|**-0.07**|
+|Sebastian Aho|+2.20|R5|+2.12|**+0.08**|
+|Timo Meier|+1.26|R6|+1.30|**-0.04**|
+|Alex Tuch|+1.17|R6|+1.30|**-0.14**|
+|Darren Raddysh|-0.13|R8|+0.87|**-1.00**|
 
 Cost side (players/picks sent) is manual: currency = Wallstedt, Sennecke, Dorofeyev, Larkin per context file. Goalies not on this board.

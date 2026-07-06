@@ -24,12 +24,12 @@ import numpy as np
 import pandas as pd
 from projection_model_v2 import KEPT, norm_name
 
-TEAMS, ROUNDS = 8, 21
-MY_SLOT = 7          # TD's 2025 draw; 2026 order TBD (late July)
+TEAMS, ROUNDS = 8, 20    # 2026-27: rosters drop to 20 slots (4D), draft is 20 rounds
+MY_SLOT = 7              # TD's 2025 draw; 2026 order TBD (late July)
 CONTEXT = "KeeperLeague_2026-27_Context.md"
 
-# TD's live picks after keepers (context file)
-TD_PICKS = ["R1","R2","R3","R4","R4b","R5","R5b","R6","R6b","R8","R8b","R9","R21"]
+# TD's live picks after keepers (context file; old R21 pick void in 20-round draft)
+TD_PICKS = ["R1","R2","R3","R4","R4b","R5","R5b","R6","R6b","R8","R8b","R9"]
 
 # acquisition targets: player -> round of the spare pick that would keep them
 TARGETS = {

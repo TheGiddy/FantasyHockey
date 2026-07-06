@@ -2,9 +2,9 @@
 *Working context file — generated 2026-07-05. Import into Claude Code as project context.*
 
 ## League setup
-- 8 teams, Yahoo, **linear draft (NOT snake)**, 21 rounds. Draft order TBD (late July). **Traded picks keep the original team's slot.**
+- 8 teams, Yahoo, **linear draft (NOT snake)**, **20 rounds (2026-27 change: was 21)**. Draft order TBD (late July). **Traded picks keep the original team's slot.**
 - H2H categories — Skaters: G, A, PIM, PPP, SOG, HIT, BLK. Goalies: W, SV%, SHO
-- Rosters: 3C / 3LW / 3RW / 5D / 2G / 5BN / IR / IR+
+- Rosters: 3C / 3LW / 3RW / **4D (2026-27 change: was 5D)** / 2G / 5BN / IR / IR+ — D replacement level rises (32 starters, not 40), D vorp deflates, fewer D games per week league-wide. TD's old R21 pick is VOID (confirmed — R21 no longer exists). BLK/HIT weekly totals shrink league-wide (fewer D starts); category leverage weights are from the 5D season — re-derive after 2026-27.
 - Keeper rules: keep at drafted round **+2**; undrafted/waiver players = round 12 default; players drafted R1-2 **cannot be kept**; a player CAN be kept using an EARLIER round pick than their keeper round; keepers limited only by matching/earlier picks owned; **pick trades must exchange equal pick counts**
 - 2025-26 standings: 1 Sawchuk Dun Thats (champ, 11-9-0/22), 2 AdamSuxDix, 3 The Most Distinguished Gents, 4 Autodraft, 5 Emotional Reactions, **6 Twin Daddy (9-10-1, 19pts)**, 7 Daren Puppa'd His Pants, 8 P.K. SubUwU
 
@@ -23,7 +23,7 @@
 **Not keepable / trade currency:** Wallstedt (#49, G), Sennecke (#90, projects top-50 next yr), Dorofeyev (#76), Larkin (#51), Konecny (#77), Clarke (#79) — all rd-12, both TD R12s consumed by Carlsson/LaCombe. Also stuck: Pinto, Bertuzzi, E. Karlsson, Landeskog.
 
 ## Twin Daddy live draft picks (after keepers)
-R1, R2, R3, R4, R4(Autodraft slot), R5, R5(ER slot), R6, R6(ER slot), R8, R8(ER slot), R9, R21
+R1, R2, R3, R4, R4(Autodraft slot), R5, R5(ER slot), R6, R6(ER slot), R8, R8(ER slot), R9 — **12 live picks** (old R21 void with the 20-round draft)
 - **Key insight: spare R8/R8/R9 can each KEEP an acquired round-12 player** (earlier-pick rule)
 - TD's own R11/13/14/17/18/20 were traded away (mostly to ER, Autodraft, PK)
 
