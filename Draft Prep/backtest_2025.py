@@ -70,7 +70,8 @@ def naive_baseline():
 if __name__ == "__main__":
     ensure_data()
     proj = build_skaters(seasons=BT_SEASONS, age_date=pd.Timestamp("2026-01-15"),
-                         hist_seasons=BT_HIST, use_weights=False)  # equal weights: comparable to actual z
+                         hist_seasons=BT_HIST, use_weights=False,   # equal weights: comparable to actual z
+                         use_conviction=False)                      # current contracts would leak the future
     actual = load_actual()
     naive = naive_baseline()
 

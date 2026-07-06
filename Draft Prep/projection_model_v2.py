@@ -100,7 +100,8 @@ KEPT_N = {norm_name(k): v for k, v in KEPT.items()}
 MAYBE_N = {norm_name(k) for k in KEPT_MAYBE}
 
 # ==================== SKATERS ====================
-def build_skaters(seasons=None, age_date=None, hist_seasons=None, use_weights=True):
+def build_skaters(seasons=None, age_date=None, hist_seasons=None, use_weights=True,
+                  use_conviction=True):
     seasons = seasons or SEASONS
     last_season = max(seasons)
     age_date = age_date if age_date is not None else AGE_DATE
@@ -199,6 +200,34 @@ def build_skaters(seasons=None, age_date=None, hist_seasons=None, use_weights=Tr
                               0.5*out["ppp60pp"] + 0.5*out["ppp60pp_last"].fillna(out["ppp60pp"]),
                               out["ppp60pp"])
 
+    # team-conviction signal (contracts.csv from fetch_contracts.py): a big
+    # post-ELC bet on an age<=25 player publishes the team's private
+    # development data (LaCombe signed $9M before his breakout). Unlocks a
+    # softer breakout treatment for players the rate-detector can't reach —
+    # single-season players and near-miss sophomores. Not used in backtests:
+    # only current contracts exist, which would leak the future.
+    out["conviction"] = False
+    out["conv_mult"] = 1.0
+    cpath = f"{DATA}/contracts.csv"
+    if use_conviction and os.path.exists(cpath):
+        con = pd.read_csv(cpath)
+        con["nn"] = con["name"].map(
+            lambda s: norm_name(" ".join(reversed(str(s).split(", ")))))
+        big = con[(con["aav"] >= 5_500_000) |
+                  ((con["aav"] >= 4_000_000) & (con["years_left"] >= 5))]
+        nn = out["name"].map(norm_name)
+        out["conviction"] = (nn.isin(set(big["nn"])) & (out["age"] <= 25.5)
+                             & ~out["breakout"])
+        b2 = np.where(out["conviction"], 0.35, 0.0)
+        for nm in ["g60","a60","sog60","xg60"]:
+            lastcol = out[nm+"_last"].fillna(out[nm])
+            out[nm] = (1-b2)*out[nm] + b2*lastcol
+        out["ppp60pp"] = np.where(
+            out["conviction"],
+            0.65*out["ppp60pp"] + 0.35*out["ppp60pp_last"].fillna(out["ppp60pp"]),
+            out["ppp60pp"])
+        out["conv_mult"] = np.where(out["conviction"], 1.05, 1.0)
+
     # ---- shooting % regression (career 2018-26 + weighted recent, position prior)
     hist = pd.concat([pd.read_csv(f"{DATA}/nhl_shpct_{s}.csv").drop_duplicates(subset=["playerId"])
                       for s in hist_seasons],
@@ -237,7 +266,8 @@ def build_skaters(seasons=None, age_date=None, hist_seasons=None, use_weights=Tr
         out["ov_note"] = ""
 
     # ---- assemble projections
-    mo = np.array([age_mult_off(a, p) for a, p in zip(out["age"], out["pos"])]) * out["off_mult"].values
+    mo = (np.array([age_mult_off(a, p) for a, p in zip(out["age"], out["pos"])])
+          * out["off_mult"].values * out["conv_mult"].values)
     mp_ = np.array([age_mult_phys(a) for a in out["age"]])
     hrs = out["toi_pg_proj"] * out["gp_proj"] / 3600
     pphrs = out["ppt_pg_proj"] * out["gp_proj"] / 3600
@@ -268,6 +298,7 @@ def build_skaters(seasons=None, age_date=None, hist_seasons=None, use_weights=Tr
         if r["gp_share_w"] < 0.72 and r["seasons"] > 1: n.append("GP risk")
         if r["age"] >= 33: n.append("age fade applied")
         if r["ov_note"]: n.append(f"OVERRIDE {r['off_mult']}: {r['ov_note']}")
+        if r["conviction"]: n.append("team-conviction contract")
         notes.append("; ".join(n))
     out["notes"] = notes
 
