@@ -113,19 +113,38 @@ def load_goalies():
     return players
 
 
-def sk_tier(v):
-    return 1 if v >= 5 else 2 if v >= 3 else 3 if v >= 1.5 else 4 if v >= 0.5 else 5
-
-
-def g_tier(z):
-    return 1 if z >= 4 else 2 if z >= 2.5 else 3 if z >= 1.5 else 4 if z >= 0.7 else 5
+def assign_tiers(group, consider, min_size, max_size, max_tier):
+    """Cliff-aware tiers over the draftable range. Walk down the value curve and
+    start a new tier when the drop to the next player is notably large (above
+    ~1.6x the average gap) — but only once the current tier has at least
+    `min_size` players, and force a break at `max_size`. This spreads tiers
+    across the whole pool instead of clustering every break at the steep top.
+    Players past `consider` are the deep pool (final tier)."""
+    s = sorted(group, key=lambda p: -p["val"])
+    gaps = [s[i]["val"] - s[i + 1]["val"] for i in range(min(consider, len(s) - 1))]
+    thr = (sum(gaps) / len(gaps)) * 1.6 if gaps else 0
+    tier, since = 1, 0
+    for i, p in enumerate(s):
+        if i >= consider:
+            p["tier"] = max_tier
+            continue
+        p["tier"] = min(tier, max_tier)
+        since += 1
+        nxt = i + 1
+        if nxt < len(s) and nxt < consider:
+            gap = p["val"] - s[nxt]["val"]
+            if since >= min_size and (gap >= thr or since >= max_size):
+                tier += 1
+                since = 0
 
 
 def assemble():
-    players = load_skaters() + load_goalies()
+    skaters, goalies = load_skaters(), load_goalies()
+    assign_tiers(skaters, consider=150, min_size=5, max_size=16, max_tier=10)
+    assign_tiers(goalies, consider=45, min_size=3, max_size=10, max_tier=6)
+    players = skaters + goalies
     for i, p in enumerate(players):
         p["id"] = i
-        p["tier"] = g_tier(p["z"]) if p["type"] == "G" else sk_tier(p["val"])
     # overall rank by value (mixed vorp/z — a rough cross-position proxy)
     for rank, p in enumerate(sorted(players, key=lambda x: -x["val"]), 1):
         p["rank"] = rank
@@ -165,7 +184,9 @@ HTML = r"""<!doctype html>
   :root{
     --bg:#0f1216; --panel:#171b22; --panel2:#1e242d; --line:#2a323d;
     --txt:#e6eaf0; --dim:#95a1b2; --acc:#4ea1ff; --my:#2ec26b; --keepother:#6b7280;
-    --warn:#ffb020; --t1:#7c5cff; --t2:#4ea1ff; --t3:#2ec26b; --t4:#c9a227; --t5:#5a6472;
+    --warn:#ffb020;
+    --t1:#8b5cff;--t2:#5c7cff;--t3:#4ea1ff;--t4:#2ec2b0;--t5:#2ec26b;
+    --t6:#8fbf3f;--t7:#d4af37;--t8:#d9822b;--t9:#c26a5a;--t10:#6b7480;
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--txt);
@@ -197,8 +218,11 @@ HTML = r"""<!doctype html>
   tbody tr{border-bottom:1px solid #1c222b;cursor:pointer}
   tbody tr:hover{background:#1b222c}
   td.name{font-weight:600}
-  .tier{display:inline-block;width:4px;height:14px;border-radius:2px;vertical-align:middle;margin-right:5px}
+  .tchip{display:inline-block;min-width:22px;text-align:center;padding:0 4px;border-radius:4px;
+    font-size:10px;font-weight:800;color:#0a0d11;margin-right:6px;vertical-align:middle}
   .t1{background:var(--t1)}.t2{background:var(--t2)}.t3{background:var(--t3)}.t4{background:var(--t4)}.t5{background:var(--t5)}
+  .t6{background:var(--t6)}.t7{background:var(--t7)}.t8{background:var(--t8)}.t9{background:var(--t9)}.t10{background:var(--t10)}
+  tr.tbreak td{border-top:2px solid #384250}
   .pos{color:var(--dim);font-size:11px}
   .val{font-weight:700}
   tr.gone{opacity:.32}
@@ -210,11 +234,15 @@ HTML = r"""<!doctype html>
   .b-other{background:var(--keepother);color:#0c0f14}
   .b-maybe{background:var(--warn);color:#1c1204}
   .b-brk{background:#7c5cff;color:#fff}
-  .act{display:inline-flex;gap:3px}
-  .act b{width:20px;height:18px;line-height:17px;text-align:center;border:1px solid var(--line);
-    border-radius:4px;color:var(--dim);font-weight:700;font-size:12px}
-  .act b.claim:hover{background:var(--my);color:#04140a;border-color:var(--my)}
+  .act{display:inline-flex;gap:4px}
+  .act b{padding:2px 8px;border:1px solid var(--line);border-radius:4px;color:var(--dim);
+    font-weight:700;font-size:11px;cursor:pointer;user-select:none}
+  .act b.claim{border-color:var(--my);color:var(--my)}
+  .act b.claim:hover{background:var(--my);color:#04140a}
   .act b.x:hover{background:#e0524d;color:#fff;border-color:#e0524d}
+  tr.mine .act b.claim{background:var(--my);color:#04140a}
+  .hint{color:var(--dim);font-size:11px;margin:-2px 0 8px}
+  .hint b{color:var(--txt)}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
   .card h2{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--dim)}
   .slot{display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid #1c222b}
@@ -237,7 +265,7 @@ HTML = r"""<!doctype html>
 <body>
 <header>
   <h1>🏒 Twin Daddy — 2026-27 Draft Board</h1>
-  <span class="date">generated __DATE__ · value = VORP (skaters) / z (goalies)</span>
+  <span class="date">generated __DATE__ · value = VORP (skaters) / z (goalies) · tiers = value-cliff breaks</span>
 </header>
 <div class="banner" id="banner"></div>
 
@@ -255,6 +283,7 @@ HTML = r"""<!doctype html>
       <label class="toggle"><input type="checkbox" id="mineOnly">my roster only</label>
       <button class="reset" id="reset">reset draft</button>
     </div>
+    <div class="hint">Click a row (or <b>Out</b>) = drafted by anyone → removed from board. <b>Mine</b> = your pick → fills your roster (panel at right). Click again to undo.</div>
     <table id="board">
       <thead><tr id="head"></tr></thead>
       <tbody id="rows"></tbody>
@@ -278,7 +307,7 @@ HTML = r"""<!doctype html>
     </div>
   </div>
 </div>
-<div class="foot">Click a row to mark drafted (any team). Use <b>＋</b> to claim to your roster, <b>✗</b> to just remove. State saves locally.</div>
+<div class="foot">Row click / <b>Out</b> = drafted by any team. <b>Mine</b> = your pick (fills roster). Toggle again to undo. State saves locally.</div>
 
 <script>
 const PLAYERS = __DATA__;
@@ -329,7 +358,7 @@ function fmt(p,key){
     else if(p.kept==="keep?") b=' <span class="badge b-maybe">KEEP?</span>';
     else if(p.kept) b=` <span class="badge b-other">${p.kept}</span>`;
     if(p.breakout) b+=' <span class="badge b-brk">BRK</span>';
-    return `<span class="tier t${p.tier}"></span><span class="name">${p.name}</span>${b}`
+    return `<span class="tchip t${p.tier}">T${p.tier}</span><span class="name">${p.name}</span>${b}`
       + (p.note?`<div class="pos" style="font-size:10px">${p.note}</div>`:"");
   }
   if(key==="stats"){
@@ -337,8 +366,9 @@ function fmt(p,key){
     if(p.type==="G") return "";
     return `${s.G|0}/${s.A|0} · ${s.SOG|0} · ${s.HIT|0}/${s.BLK|0} · ${s.PPP|0}`;
   }
-  if(key==="act") return `<span class="act"><b class="claim" data-a="claim" title="claim to my roster">＋</b>`
-    + `<b class="x" data-a="x" title="remove (drafted by other)">✗</b></span>`;
+  if(key==="act") return `<span class="act">`
+    + `<b class="claim" data-a="claim" title="drafted by ME — add to my roster">Mine</b>`
+    + `<b class="x" data-a="x" title="drafted by another team — remove">Out</b></span>`;
   if(["G","A","PIM","PPP","SOG","HIT","BLK"].includes(key)) return p.stats[key]|0;
   if(key==="SV%") return p.stats["SV%"]?p.stats["SV%"].toFixed(3):"";
   if(["starts","W","SHO"].includes(key)) return p.stats[key]?p.stats[key].toFixed(0):"";
@@ -351,7 +381,7 @@ function visible(){
     if(pos==="G" && p.type!=="G") return false;
     if(pos!=="ALL" && pos!=="G" && !p.pos.split("/").includes(pos)) return false;
     if(q && !p.name.toLowerCase().includes(q)) return false;
-    if(hideGone && state.gone[p.id]) return false;
+    if(hideGone && state.gone[p.id] && !state.mine[p.id]) return false;  // keep my picks visible
     if(mineOnly && !state.mine[p.id]) return false;
     return true;
   });
@@ -377,8 +407,12 @@ function renderHead(){
 
 function renderRows(){
   const cols=colset();
+  const grouped=(sortKey==="rank"||sortKey==="val");  // tiers only line up in value order
+  let prevTier=null;
   const rows=visible().map(p=>{
-    const cls=[state.gone[p.id]?"gone":"", state.mine[p.id]?"mine":""].join(" ");
+    const brk=(grouped && prevTier!==null && p.tier!==prevTier)?" tbreak":"";
+    prevTier=p.tier;
+    const cls=[state.gone[p.id]?"gone":"", state.mine[p.id]?"mine":"", brk.trim()].join(" ");
     const tds=cols.map(([k])=>{
       const cl=(k==="name"||k==="pos"||k==="stats")?"l":"";
       const extra=k==="val"?" val":"";
