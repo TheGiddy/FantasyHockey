@@ -36,6 +36,13 @@
 - Data notes: NHL stats API pages can duplicate rows at page boundaries (dedupe on playerId per season); TOI fields are seconds; MoneyPuck merges cleanly on NHL playerId
 - Findings vs v1: Hellebuyck fine (G4 overall — Yahoo list artifact); Carlsson's low format rank confirmed by data (no bangers); Gauthier/Cooley sh% regression is real (ixG well below goals)
 
+## NHLe rookie module (2026-07-19)
+- Fills the model's biggest known hole: players with no NHL history (2026 draftees, junior-bound 2024/25 picks) are invisible to the per-60 pipeline — and they're where keeper value hides (Gauthier R19)
+- `fetch_prospects.py` — draft classes 2024-26 rounds 1-2 via api-web; resolves names→playerIds through the NHL search API (needs `requests`: Python's own CA store rejects search.d3.nhle.com), pulls club-league season totals from player landings → `data/prospect_meta.csv` + `prospect_stats.csv` (188/192 resolved; 4 misses are non-fantasy D/G)
+- `project_rookies.py` — league-equivalency translation (Desjardins/Vollman factors, NNHLe-style age term +5%/yr under 21 capped 1.2, pedigree mult 1.15 top-3 / 1.08 top-10), decomposed into 7 cats (G-share 50/50 own vs position norm, SOG via position sh%, HIT/BLK = NHL position 40th-percentile rates, PIM from junior rate damped); z/vorp computed on the main pool's scale → `output/projections_v2_rookies.csv` + `rookies.md`
+- Make-the-NHL gate: NHLe p82 ≥ 45 OR NHL GP ≥ 5 OR 2026 top-5. 16 pass (McKenna 55p/72gp median, Martone, Hagens, Iginla, Cole Hutson…), 144 evaluated to a watchlist for manual review. Players with >25 NHL GP excluded (main model covers them)
+- Board appends rookies with an orange RK badge; wide error bars — these are medians for late-round keeper fliers, not forecasts
+
 ## A1-share flag (2026-07-19)
 - Inspired by the Ocelot VAEP post (goal-credit / creators-vs-converters) but implemented via the far cheaper, better-validated proxy already in our data: MoneyPuck `I_F_primaryAssists`/`I_F_secondaryAssists` (secondary assists are much noisier year-over-year)
 - `projection_model_v2.py` computes 3-season A1 share per player (min 60 assists), position norms in-run (F ~60%, D ~47%, both ±6pp), flags >1 SD below norm as "A regress risk" in notes when projected A ≥ 25; `a1_share` exported in the skater CSV

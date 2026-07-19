@@ -23,6 +23,7 @@ import json
 from datetime import date
 
 SK_CSV = "output/projections_v2_skaters.csv"
+RK_CSV = "output/projections_v2_rookies.csv"   # from project_rookies.py (optional)
 G_CSV = "output/projections_v2_goalies.csv"
 SCHED_CSV = "data/schedule_team_metrics.csv"   # from analyze_schedule.py (optional)
 OUT = "output/draft_board.html"
@@ -90,9 +91,9 @@ def load_schedule():
                 for r in csv.DictReader(f)}
 
 
-def load_skaters():
+def _skater_rows(path, rookie=False):
     players = []
-    with open(SK_CSV, encoding="utf-8-sig") as f:
+    with open(path, encoding="utf-8-sig") as f:
         for r in csv.DictReader(f):
             vorp = _num(r.get("vorp"), float, default=None)
             if vorp is None:
@@ -102,12 +103,24 @@ def load_skaters():
                 "team": r.get("team", ""), "age": _num(r.get("age"), float, 0),
                 "val": round(vorp, 2), "z": _num(r.get("z"), float, 0),
                 "kept": (r.get("kept") or "").strip(), "type": "S",
-                "note": (r.get("notes") or "").strip(),
+                "note": (r.get("notes") or "").strip(), "rookie": rookie,
                 "breakout": (r.get("breakout") or "").strip().lower() == "true",
                 "stats": {s: _num(r.get(s), float, 0) for s in SK_STATS},
             })
+    return players
+
+
+def load_skaters():
+    players = _skater_rows(SK_CSV)
     players.sort(key=lambda p: -p["val"])
-    return players[:MAX_SKATERS]
+    players = players[:MAX_SKATERS]
+    try:
+        players += _skater_rows(RK_CSV, rookie=True)
+    except FileNotFoundError:
+        print(f"WARNING: {RK_CSV} not found — run fetch_prospects.py + "
+              "project_rookies.py for NHLe rookies on the board")
+    players.sort(key=lambda p: -p["val"])
+    return players
 
 
 def load_goalies():
@@ -260,6 +273,7 @@ HTML = r"""<!doctype html>
   .b-other{background:var(--keepother);color:#0c0f14}
   .b-maybe{background:var(--warn);color:#1c1204}
   .b-brk{background:#7c5cff;color:#fff}
+  .b-rk{background:#d9822b;color:#1c1204}
   .act{display:inline-flex;gap:4px}
   .act b{padding:2px 8px;border:1px solid var(--line);border-radius:4px;color:var(--dim);
     font-weight:700;font-size:11px;cursor:pointer;user-select:none}
@@ -387,6 +401,7 @@ function fmt(p,key){
     else if(p.kept==="keep?") b=' <span class="badge b-maybe">KEEP?</span>';
     else if(p.kept) b=` <span class="badge b-other">${p.kept}</span>`;
     if(p.breakout) b+=' <span class="badge b-brk">BRK</span>';
+    if(p.rookie) b+=' <span class="badge b-rk">RK</span>';
     return `<span class="tchip t${p.tier}">T${p.tier}</span><span class="name">${p.name}</span>${b}`
       + (p.note?`<div class="pos" style="font-size:10px">${p.note}</div>`:"");
   }
