@@ -36,6 +36,13 @@
 - Data notes: NHL stats API pages can duplicate rows at page boundaries (dedupe on playerId per season); TOI fields are seconds; MoneyPuck merges cleanly on NHL playerId
 - Findings vs v1: Hellebuyck fine (G4 overall — Yahoo list artifact); Carlsson's low format rank confirmed by data (no bangers); Gauthier/Cooley sh% regression is real (ixG well below goals)
 
+## Schedule module (2026-07-19)
+- `fetch_schedule.py` → `data/schedule_20262027.csv` (full 2026-27 slate from api-web weekly endpoint; 1,344 games, 84/team, no Olympic break)
+- `analyze_schedule.py` → `data/schedule_team_metrics.csv` + `output/schedule_analysis.md`: per-team off-night games (Mon/Wed/Fri/Sun), streamability (each game weighted by share of league idle that night), B2B sets (backup-goalie games floor), perfect weeks, and games per league playoff week
+- League playoff weeks ≠ Yahoo default (we run a week earlier; 2025-26 was Mar 16–Apr 5). Projected 2027 dates in `PLAYOFF_WEEKS` (R1 Mar 15–21, R2 Mar 22–28, F Mar 29–Apr 4) — **update when Yahoo posts the real calendar**
+- `build_draft_board.py` picks up the metrics CSV automatically → OffN/FinW columns (+ B2B for goalies) as draft tiebreakers; deliberately NOT in the z-sum (talent first, calendar as tiebreak)
+- Key 2026-27 facts: COL 40 / NYR 39 / WSH+UTA 38 off-nights vs NSH 20 (18-game usable-start spread); PIT 15 B2Bs vs VGK/CGY 8; under OUR playoff dates MIN has the dream finals week (4g, all off-nights), WSH leads total playoff volume (12g)
+
 ## v2 roadmap (original, at home, Claude Code, open network)
 1. Run `fetch_nhl_data_v2.py` → `./data/*.csv`
 2. Replace embedded lines with 3-season weighted per-60 rates × projected TOI (the single biggest accuracy gain)

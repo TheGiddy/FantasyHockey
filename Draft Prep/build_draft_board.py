@@ -12,6 +12,8 @@ browser (prep or live draft, offline). Features:
     showing what you still need
   - goalie-tier tracker (the "don't punt goalies" cue from the two-season analysis)
   - collapsible opponent-intel panel (category profiles, posture, top threat)
+  - schedule tiebreaker columns (off-night games, finals-week games, goalie
+    B2B sets) from data/schedule_team_metrics.csv when present
   - localStorage persistence + reset
 
 Run from ./Draft Prep:  python build_draft_board.py
@@ -22,6 +24,7 @@ from datetime import date
 
 SK_CSV = "output/projections_v2_skaters.csv"
 G_CSV = "output/projections_v2_goalies.csv"
+SCHED_CSV = "data/schedule_team_metrics.csv"   # from analyze_schedule.py (optional)
 OUT = "output/draft_board.html"
 
 MY = "TD"                      # keeper flag for Twin Daddy in the CSVs
@@ -69,6 +72,22 @@ def _num(v, cast=float, default=None):
         return cast(v)
     except (ValueError, TypeError):
         return default
+
+
+def load_schedule():
+    """Team -> schedule tiebreaker metrics. Empty dict if the CSV is missing
+    (board still builds; schedule columns show blank)."""
+    try:
+        f = open(SCHED_CSV, encoding="utf-8-sig")
+    except FileNotFoundError:
+        print(f"WARNING: {SCHED_CSV} not found — run fetch_schedule.py + "
+              "analyze_schedule.py for schedule columns")
+        return {}
+    with f:
+        return {r["team"]: {"off": _num(r["offnight"], int, 0),
+                            "pof": _num(r["po_Final_g"], int, 0),
+                            "b2b": _num(r["b2b_sets"], int, 0)}
+                for r in csv.DictReader(f)}
 
 
 def load_skaters():
@@ -143,6 +162,13 @@ def assemble():
     assign_tiers(skaters, consider=150, min_size=5, max_size=16, max_tier=10)
     assign_tiers(goalies, consider=45, min_size=3, max_size=10, max_tier=6)
     players = skaters + goalies
+    sched = load_schedule()
+    for p in players:
+        # traded players carry "OLD,NEW" team codes — schedule is the current team
+        s = sched.get(p["team"].split(",")[-1], {})
+        p["off"] = s.get("off")
+        p["pof"] = s.get("pof")
+        p["b2b"] = s.get("b2b") if p["type"] == "G" else None
     for i, p in enumerate(players):
         p["id"] = i
     # overall rank by value (mixed vorp/z — a rough cross-position proxy)
@@ -265,7 +291,8 @@ HTML = r"""<!doctype html>
 <body>
 <header>
   <h1>🏒 Twin Daddy — 2026-27 Draft Board</h1>
-  <span class="date">generated __DATE__ · value = VORP (skaters) / z (goalies) · tiers = value-cliff breaks</span>
+  <span class="date">generated __DATE__ · value = VORP (skaters) / z (goalies) · tiers = value-cliff breaks
+    · OffN = off-night games (Mon/Wed/Fri/Sun, more usable starts) · FinW = games in finals week (Mar 29–Apr 4, projected) · B2B = back-to-back sets</span>
 </header>
 <div class="banner" id="banner"></div>
 
@@ -341,10 +368,12 @@ const byId = Object.fromEntries(PLAYERS.map(p=>[p.id,p]));
 
 function colset(){
   if(pos==="G") return [["rank","#"],["val","Val"],["name","Player"],["team","Tm"],
-    ["starts","GS"],["W","W"],["SV%","SV%"],["SHO","SHO"],["GSAx","GSAx"],["act",""]];
+    ["starts","GS"],["W","W"],["SV%","SV%"],["SHO","SHO"],["GSAx","GSAx"],
+    ["b2b","B2B"],["off","OffN"],["pof","FinW"],["act",""]];
   const base=[["rank","#"],["val","VORP"],["name","Player"],["pos","Pos"],["team","Tm"],["age","Age"]];
-  if(pos==="ALL") return [...base,["stats","G/A · SOG · HIT/BLK · PPP"],["act",""]];
-  return [...base, ...SKSTATS.map(s=>[s,s]), ["act",""]];
+  const sched=[["off","OffN"],["pof","FinW"]];
+  if(pos==="ALL") return [...base,["stats","G/A · SOG · HIT/BLK · PPP"],...sched,["act",""]];
+  return [...base, ...SKSTATS.map(s=>[s,s]), ...sched, ["act",""]];
 }
 
 function fmt(p,key){
@@ -388,7 +417,7 @@ function visible(){
   const k=sortKey;
   list.sort((a,b)=>{
     let av,bv;
-    if(["rank","val","age","z","tier"].includes(k)){av=a[k];bv=b[k];}
+    if(["rank","val","age","z","tier","off","pof","b2b"].includes(k)){av=a[k]??-1;bv=b[k]??-1;}
     else if(a.stats && k in a.stats){av=a.stats[k]||0;bv=b.stats[k]||0;}
     else {av=(""+fmt(a,k)).toLowerCase();bv=(""+fmt(b,k)).toLowerCase();}
     return av<bv?-sortDir:av>bv?sortDir:0;
