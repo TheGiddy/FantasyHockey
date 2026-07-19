@@ -121,7 +121,8 @@ def build_skaters(seasons=None, age_date=None, hist_seasons=None, use_weights=Tr
     for s in seasons:
         yr = int(str(s)[:4])
         mp = pd.read_csv(f"{DATA}/moneypuck_skaters_{yr}.csv")
-        mp = mp[mp["situation"] == "all"][["playerId","I_F_xGoals"]].drop_duplicates(subset=["playerId"])
+        mp = mp[mp["situation"] == "all"][["playerId","I_F_xGoals",
+              "I_F_primaryAssists","I_F_secondaryAssists"]].drop_duplicates(subset=["playerId"])
         mp["season"] = s
         mps.append(mp)
     df = df.merge(pd.concat(mps, ignore_index=True), on=["playerId","season"], how="left")
@@ -252,6 +253,24 @@ def build_skaters(seasons=None, age_date=None, hist_seasons=None, use_weights=Tr
     rawXG = df.groupby("playerId")["I_F_xGoals"].sum().reindex(out["playerId"]).values
     out["fin"] = ((rawG + 10) / (np.nan_to_num(rawXG) + 10)).clip(0.8, 1.3)
 
+    # ---- A1 share (assist sustainability): secondary assists are far noisier
+    # year-over-year than primary, so an assist total built on A2s is regression
+    # risk. Flag players >1 SD below their position's A1-share norm (min 60
+    # assists over the window so the share itself isn't noise).
+    a1 = df.groupby("playerId")["I_F_primaryAssists"].sum().reindex(out["playerId"]).values
+    a2 = df.groupby("playerId")["I_F_secondaryAssists"].sum().reindex(out["playerId"]).values
+    a_tot = np.nan_to_num(a1) + np.nan_to_num(a2)
+    out["a1_share"] = np.where(a_tot >= 60, np.nan_to_num(a1) / np.maximum(a_tot, 1), np.nan)
+    is_d = out["pos"].eq("D").values
+    a1_norm, a1_std = {}, {}
+    for d in [True, False]:
+        grp = out.loc[(is_d == d) & out["a1_share"].notna(), "a1_share"]
+        a1_norm[d], a1_std[d] = grp.mean(), grp.std(ddof=0)
+    out["a1_pos_norm"] = [a1_norm[d] for d in is_d]
+    out["a2_heavy"] = (out["a1_share"] <
+                       out["a1_pos_norm"] - np.array([a1_std[d] for d in is_d]))
+    out["a2_heavy"] = out["a2_heavy"].fillna(False)
+
     # manual deployment overrides (offseason moves, line changes — overrides.csv)
     out["off_mult"] = 1.0
     if os.path.exists("overrides.csv"):
@@ -295,6 +314,9 @@ def build_skaters(seasons=None, age_date=None, hist_seasons=None, use_weights=Tr
             d = r["sh_last"] - r["sh_proj"]
             if d > 0.02: n.append(f"sh% regress DOWN ({r['sh_last']:.1%}->{r['sh_proj']:.1%})")
             elif d < -0.02: n.append(f"sh% regress UP ({r['sh_last']:.1%}->{r['sh_proj']:.1%})")
+        if r["a2_heavy"] and r["A"] >= 25:
+            n.append(f"A regress risk (A1 {r['a1_share']:.0%} vs "
+                     f"{'D' if r['pos']=='D' else 'F'} avg {r['a1_pos_norm']:.0%})")
         if r["gp_share_w"] < 0.72 and r["seasons"] > 1: n.append("GP risk")
         if r["age"] >= 33: n.append("age fade applied")
         if r["ov_note"]: n.append(f"OVERRIDE {r['off_mult']}: {r['ov_note']}")
@@ -443,7 +465,7 @@ if __name__ == "__main__":
             print(f"WARNING: {path} locked (open in Excel?); wrote {alt}")
 
     keep_cols = ["name","yahoo_pos","team","age","gp_proj","G","A","PIM","PPP","SOG","HIT","BLK","z","vorp","kept","notes"]
-    safe_csv(sk[keep_cols + ["sh_proj","fin","toi_pg_proj","breakout"]], f"{OUT}/projections_v2_skaters.csv")
+    safe_csv(sk[keep_cols + ["sh_proj","fin","toi_pg_proj","breakout","a1_share"]], f"{OUT}/projections_v2_skaters.csv")
     gcols = ["name","team","starts_proj","W","sv_proj","SHO","gsax60","z","kept"]
     safe_csv(gl[gcols], f"{OUT}/projections_v2_goalies.csv")
 

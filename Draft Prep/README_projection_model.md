@@ -36,6 +36,11 @@
 - Data notes: NHL stats API pages can duplicate rows at page boundaries (dedupe on playerId per season); TOI fields are seconds; MoneyPuck merges cleanly on NHL playerId
 - Findings vs v1: Hellebuyck fine (G4 overall — Yahoo list artifact); Carlsson's low format rank confirmed by data (no bangers); Gauthier/Cooley sh% regression is real (ixG well below goals)
 
+## A1-share flag (2026-07-19)
+- Inspired by the Ocelot VAEP post (goal-credit / creators-vs-converters) but implemented via the far cheaper, better-validated proxy already in our data: MoneyPuck `I_F_primaryAssists`/`I_F_secondaryAssists` (secondary assists are much noisier year-over-year)
+- `projection_model_v2.py` computes 3-season A1 share per player (min 60 assists), position norms in-run (F ~60%, D ~47%, both ±6pp), flags >1 SD below norm as "A regress risk" in notes when projected A ≥ 25; `a1_share` exported in the skater CSV
+- Notes-only — projections/z/vorp unchanged. 26 flagged incl. Bouchard (38%), Stützle, Eichel, Robertson, Heiskanen; TD-relevant: Holloway (48%, already lean-release), Tuch keep? (52%)
+
 ## Schedule module (2026-07-19)
 - `fetch_schedule.py` → `data/schedule_20262027.csv` (full 2026-27 slate from api-web weekly endpoint; 1,344 games, 84/team, no Olympic break)
 - `analyze_schedule.py` → `data/schedule_team_metrics.csv` + `output/schedule_analysis.md`: per-team off-night games (Mon/Wed/Fri/Sun), streamability (each game weighted by share of league idle that night), B2B sets (backup-goalie games floor), perfect weeks, and games per league playoff week

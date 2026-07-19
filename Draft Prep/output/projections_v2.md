@@ -8,22 +8,22 @@
 |2|Connor McDavid|C|EDM|30|76|38|84|40|45|258|49|27|8.22|9.1|||
 |3|Moritz Seider|D|DET|26|80|9|47|50|27|180|162|181|5.1|9.07||breakout blend|
 |4|Macklin Celebrini|C|SJS|21|77|40|67|39|33|293|48|55|7.86|8.74|ER|breakout blend; sh% regress DOWN (15.7%->13.6%)|
-|5|Evan Bouchard|D|EDM|27|80|17|65|30|31|222|34|102|3.84|7.81|Sawchuk|sh% regress DOWN (9.5%->7.4%)|
+|5|Evan Bouchard|D|EDM|27|80|17|65|30|31|222|34|102|3.84|7.81|Sawchuk|sh% regress DOWN (9.5%->7.4%); A regress risk (A1 38% vs D avg 47%)|
 |6|Cale Makar|D|COL|28|76|22|60|19|33|215|36|107|3.79|7.76|||
 |7|Zach Werenski|D|CBJ|30|76|19|56|23|21|259|25|110|3.38|7.35|Puppa||
 |8|Rasmus Dahlin|D|BUF|27|76|17|52|67|22|200|92|93|3.37|7.34|||
 |9|Brady Tkachuk|C/LW|FLA|27|70|27|34|99|22|264|207|26|6.0|7.13||OVERRIDE 0.97: FLA blockbuster — loaded top-9 shaves individual volume slightly|
 |10|Matthew Schaefer|D|NYI|19|80|22|39|38|19|238|40|112|2.52|6.49|Puppa||
-|11|Jakob Chychrun|D|WSH|29|79|20|32|61|18|215|59|119|2.37|6.34|Autodraft|sh% regress DOWN (11.8%->9.1%)|
+|11|Jakob Chychrun|D|WSH|29|79|20|32|61|18|215|59|119|2.37|6.34|Autodraft|sh% regress DOWN (11.8%->9.1%); A regress risk (A1 39% vs D avg 47%)|
 |12|David Pastrnak|RW|BOS|31|78|35|63|57|28|273|72|27|6.18|6.15|||
 |13|Quinn Hughes|D|MIN|27|74|12|68|33|34|195|12|79|2.13|6.1||sh% regress UP (3.7%->5.9%)|
 |14|Nikita Kucherov|RW|TBL|34|77|36|77|43|38|221|31|30|5.67|5.64||sh% regress DOWN (19.0%->15.6%); age fade applied|
 |15|MacKenzie Weegar|D|UTA|33|78|8|27|61|10|155|177|172|1.57|5.54|ASD|sh% regress UP (2.6%->4.8%); age fade applied|
-|16|Jason Robertson|LW/RW|DAL|28|80|39|49|26|33|257|55|37|4.54|5.25|ER||
+|16|Jason Robertson|LW/RW|DAL|28|80|39|49|26|33|257|55|37|4.54|5.25|ER|A regress risk (A1 47% vs F avg 60%)|
 |17|Wyatt Johnston|C/RW|DAL|24|80|40|42|26|38|217|51|50|3.78|4.91|Sawchuk|sh% regress DOWN (21.8%->17.4%); team-conviction contract|
 |18|Jake Sanderson|D|OTT|24|74|13|46|11|26|179|35|144|0.89|4.86|keep?|sh% regress DOWN (9.5%->6.9%); team-conviction contract|
 |19|Matt Boldy|LW/RW|MIN|26|77|33|43|39|28|255|54|58|4.01|4.72|ER|breakout blend; sh% regress DOWN (16.5%->13.4%)|
-|20|Tim Stützle|C/LW|OTT|25|78|29|53|39|31|197|121|43|3.46|4.59||sh% regress DOWN (17.5%->14.7%); team-conviction contract|
+|20|Tim Stützle|C/LW|OTT|25|78|29|53|39|31|197|121|43|3.46|4.59||sh% regress DOWN (17.5%->14.7%); A regress risk (A1 46% vs F avg 60%); team-conviction contract|
 |21|Leon Draisaitl|C/LW|EDM|31|71|36|58|34|38|202|33|20|3.18|4.31|||
 |22|Connor Bedard|C/RW|CHI|22|74|30|49|57|25|242|41|32|3.13|4.26||breakout blend|
 |23|Auston Matthews|C|TOR|29|68|38|35|20|18|261|51|90|3.37|4.25||sh% regress UP (11.9%->14.1%)|
@@ -35,7 +35,7 @@
 |29|Brock Faber|D|MIN|24|78|12|34|36|12|170|42|154|-0.38|3.59|ASD|team-conviction contract|
 |30|Juraj Slafkovský|LW/RW|MTL|23|79|27|41|51|25|174|142|73|2.78|3.49|ER|breakout blend; sh% regress DOWN (16.7%->14.5%)|
 |31|Mikhail Sergachev|D|UTA|29|74|10|42|37|23|140|46|126|-0.56|3.41|||
-|32|Jack Eichel|C|VGK|30|74|27|58|15|29|240|29|46|2.48|3.36|Sawchuk||
+|32|Jack Eichel|C|VGK|30|74|27|58|15|29|240|29|46|2.48|3.36|Sawchuk|A regress risk (A1 47% vs F avg 60%)|
 |33|Charlie McAvoy|D|BOS|29|67|9|38|63|16|113|97|123|-0.79|3.18|keep?|sh% regress DOWN (9.9%->7.8%)|
 |34|Kiefer Sherwood|LW/RW|SJS|32|74|22|18|51|10|174|427|34|2.39|3.1|Autodraft||
 |35|Filip Forsberg|LW|NSH|32|80|32|34|36|23|234|128|38|2.6|3.06|ASD|sh% regress DOWN (16.3%->13.7%)|
@@ -55,7 +55,7 @@
 |49|Martin Necas|RW|COL|28|77|30|57|27|28|205|77|26|2.19|2.16|Sawchuk|sh% regress DOWN (18.4%->14.7%)|
 |50|Cole Caufield|LW/RW|MTL|26|79|38|35|14|23|250|54|24|1.44|2.15|PK|sh% regress DOWN (19.8%->15.5%)|
 |51|Jacob Trouba|D|SJS|33|77|6|19|46|1|134|150|166|-1.83|2.14|keep?|OVERRIDE 1.0: SJS reunion w/ Nurse — usage secure|
-|52|Miro Heiskanen|D|DAL|28|70|8|43|25|21|142|24|117|-1.87|2.1|||
+|52|Miro Heiskanen|D|DAL|28|70|8|43|25|21|142|24|117|-1.87|2.1||A regress risk (A1 40% vs D avg 47%)|
 |53|Clayton Keller|LW/RW|UTA|28|79|27|56|33|29|211|10|30|1.38|2.09|Puppa||
 |54|Alex DeBrincat|LW/RW|DET|29|80|34|36|24|23|242|39|37|1.36|2.07||OVERRIDE 0.95: Larkin trade request pending — DET center downgrade risk|
 |55|Cutter Gauthier|C/LW/RW|ANA|23|72|33|27|24|16|260|63|31|0.66|2.04|TD|breakout blend|
@@ -64,21 +64,21 @@
 |58|Sam Reinhart|C/RW|FLA|31|73|34|35|18|28|184|76|50|0.8|1.93|ASD||
 |59|Sam Bennett|C|FLA|31|75|24|27|85|13|200|128|37|1.04|1.92|keep?||
 |60|Kyle Connor|LW|WPG|30|78|36|47|17|20|245|27|27|1.42|1.88|||
-|61|Tom Wilson|RW|WSH|33|75|24|27|110|12|143|197|60|1.91|1.88|Puppa|sh% regress DOWN (19.6%->16.7%)|
+|61|Tom Wilson|RW|WSH|33|75|24|27|110|12|143|197|60|1.91|1.88|Puppa|sh% regress DOWN (19.6%->16.7%); A regress risk (A1 53% vs F avg 60%)|
 |62|Sebastian Aho|C|CAR|30|78|29|48|44|25|194|54|22|0.98|1.86|||
-|63|Kevin Fiala|LW|LAK|30|70|29|30|47|28|222|61|29|1.25|1.71|||
+|63|Kevin Fiala|LW|LAK|30|70|29|30|47|28|222|61|29|1.25|1.71||A regress risk (A1 52% vs F avg 60%)|
 |64|Jake Guentzel|LW/RW|TBL|32|78|31|40|42|26|194|35|41|0.92|1.63|||
 |65|Dylan Larkin|C|DET|30|76|30|34|43|24|216|44|32|0.75|1.63|||
 |66|Roman Josi|D|NSH|37|68|12|35|27|20|160|26|84|-2.45|1.52||age fade applied|
 |67|Vince Dunn|D|SEA|30|73|11|31|49|17|156|28|79|-2.56|1.41|ASD||
 |68|Thomas Harley|D|DAL|25|74|11|34|22|10|141|40|135|-2.63|1.34|keep?|team-conviction contract|
 |69|Nico Hischier|C|NJD|28|77|29|36|24|24|197|51|58|0.41|1.29|ASD||
-|70|Dougie Hamilton|D|NJD|34|70|10|25|41|12|172|77|76|-2.73|1.24|PK|age fade applied|
+|70|Dougie Hamilton|D|NJD|34|70|10|25|41|12|172|77|76|-2.73|1.24|PK|A regress risk (A1 41% vs D avg 47%); age fade applied|
 |71|Adrian Kempe|RW|LAK|30|79|30|35|50|15|214|111|35|1.26|1.23|Gents||
 |72|Timo Meier|LW/RW|NJD|30|77|26|21|36|11|238|129|54|0.49|1.2|||
 |73|Filip Hronek|D|VAN|29|75|6|36|36|15|118|116|91|-2.82|1.15|||
 |74|Mark Scheifele|C|WPG|34|79|29|51|48|20|152|47|48|0.27|1.15|Autodraft|age fade applied|
-|75|Alex Tuch|LW/RW|WSH|31|78|28|31|51|9|183|74|92|0.41|1.12|keep?|OVERRIDE 1.02: WSH — projected line with Ovechkin|
+|75|Alex Tuch|LW/RW|WSH|31|78|28|31|51|9|183|74|92|0.41|1.12|keep?|A regress risk (A1 52% vs F avg 60%); OVERRIDE 1.02: WSH — projected line with Ovechkin|
 |76|Mitch Marner|C/LW/RW|VGK|30|78|23|59|19|27|158|35|43|-0.32|1.06|||
 |77|Aleksander Barkov|C|FLA|31|71|21|51|18|28|156|92|53|0.07|0.95|Puppa||
 |78|Drake Batherson|LW/RW|OTT|29|79|26|37|32|28|170|125|25|0.21|0.92|keep?|sh% regress DOWN (19.8%->15.2%)|
@@ -98,7 +98,7 @@
 |92|Bowen Byram|D|CHI|26|79|11|33|47|6|112|62|100|-3.72|0.25||OVERRIDE 1.1: CHI the-guy usage; PP1 with Bedard|
 |93|Pavel Dorofeyev|LW/RW|NYR|26|77|33|22|25|25|223|26|30|-0.46|0.25|||
 |94|Alex Laferriere|C/LW/RW|LAK|25|79|21|22|23|5|204|202|46|-1.14|0.24|ASD||
-|95|Bo Horvat|C|NYI|32|74|29|27|31|13|222|67|38|-0.65|0.23|||
+|95|Bo Horvat|C|NYI|32|74|29|27|31|13|222|67|38|-0.65|0.23||A regress risk (A1 53% vs F avg 60%)|
 |96|Luke Hughes|D|NJD|23|72|9|36|27|17|164|20|57|-3.75|0.22||team-conviction contract|
 |97|Jeremy Lauzon|D|VGK|30|63|3|9|86|0|70|267|92|-3.76|0.21||sh% regress UP (1.4%->3.7%); GP risk|
 |98|Thomas Chabot|D|OTT|30|68|8|29|24|8|132|47|127|-3.81|0.16|||
@@ -119,7 +119,7 @@
 |8|Quinn Hughes|D|MIN|27|74|12|68|33|34|195|12|79|2.13|6.1|3||sh% regress UP (3.7%->5.9%)|
 |9|Nikita Kucherov|RW|TBL|34|77|36|77|43|38|221|31|30|5.67|5.64|4||sh% regress DOWN (19.0%->15.6%); age fade applied|
 |10|Jake Sanderson|D|OTT|24|74|13|46|11|26|179|35|144|0.89|4.86|5|keep?|sh% regress DOWN (9.5%->6.9%); team-conviction contract|
-|11|Tim Stützle|C/LW|OTT|25|78|29|53|39|31|197|121|43|3.46|4.59|5||sh% regress DOWN (17.5%->14.7%); team-conviction contract|
+|11|Tim Stützle|C/LW|OTT|25|78|29|53|39|31|197|121|43|3.46|4.59|5||sh% regress DOWN (17.5%->14.7%); A regress risk (A1 46% vs F avg 60%); team-conviction contract|
 |12|Leon Draisaitl|C/LW|EDM|31|71|36|58|34|38|202|33|20|3.18|4.31|5|||
 |13|Connor Bedard|C/RW|CHI|22|74|30|49|57|25|242|41|32|3.13|4.26|5||breakout blend|
 |14|Auston Matthews|C|TOR|29|68|38|35|20|18|261|51|90|3.37|4.25|5||sh% regress UP (11.9%->14.1%)|
@@ -135,20 +135,20 @@
 |24|Kirill Kaprizov|LW|MIN|30|69|37|40|26|27|228|43|26|1.75|2.21|6||OVERRIDE 0.97: lost long-time linemate Zuccarello|
 |25|Noah Dobson|D|MTL|27|76|11|35|32|9|169|43|122|-1.8|2.17|6|||
 |26|Jacob Trouba|D|SJS|33|77|6|19|46|1|134|150|166|-1.83|2.14|6|keep?|OVERRIDE 1.0: SJS reunion w/ Nurse — usage secure|
-|27|Miro Heiskanen|D|DAL|28|70|8|43|25|21|142|24|117|-1.87|2.1|6|||
+|27|Miro Heiskanen|D|DAL|28|70|8|43|25|21|142|24|117|-1.87|2.1|6||A regress risk (A1 40% vs D avg 47%)|
 |28|Alex DeBrincat|LW/RW|DET|29|80|34|36|24|23|242|39|37|1.36|2.07|6||OVERRIDE 0.95: Larkin trade request pending — DET center downgrade risk|
 |29|Brandon Montour|D|SEA|33|72|12|21|53|9|186|81|84|-1.95|2.02|6|||
 |30|Sam Bennett|C|FLA|31|75|24|27|85|13|200|128|37|1.04|1.92|6|keep?||
 |31|Kyle Connor|LW|WPG|30|78|36|47|17|20|245|27|27|1.42|1.88|6|||
 |32|Sebastian Aho|C|CAR|30|78|29|48|44|25|194|54|22|0.98|1.86|6|||
-|33|Kevin Fiala|LW|LAK|30|70|29|30|47|28|222|61|29|1.25|1.71|6|||
+|33|Kevin Fiala|LW|LAK|30|70|29|30|47|28|222|61|29|1.25|1.71|6||A regress risk (A1 52% vs F avg 60%)|
 |34|Jake Guentzel|LW/RW|TBL|32|78|31|40|42|26|194|35|41|0.92|1.63|6|||
 |35|Dylan Larkin|C|DET|30|76|30|34|43|24|216|44|32|0.75|1.63|6|||
 |36|Roman Josi|D|NSH|37|68|12|35|27|20|160|26|84|-2.45|1.52|6||age fade applied|
 |37|Thomas Harley|D|DAL|25|74|11|34|22|10|141|40|135|-2.63|1.34|6|keep?|team-conviction contract|
 |38|Timo Meier|LW/RW|NJD|30|77|26|21|36|11|238|129|54|0.49|1.2|6|||
 |39|Filip Hronek|D|VAN|29|75|6|36|36|15|118|116|91|-2.82|1.15|6|||
-|40|Alex Tuch|LW/RW|WSH|31|78|28|31|51|9|183|74|92|0.41|1.12|6|keep?|OVERRIDE 1.02: WSH — projected line with Ovechkin|
+|40|Alex Tuch|LW/RW|WSH|31|78|28|31|51|9|183|74|92|0.41|1.12|6|keep?|A regress risk (A1 52% vs F avg 60%); OVERRIDE 1.02: WSH — projected line with Ovechkin|
 |41|Mitch Marner|C/LW/RW|VGK|30|78|23|59|19|27|158|35|43|-0.32|1.06|6|||
 |42|Drake Batherson|LW/RW|OTT|29|79|26|37|32|28|170|125|25|0.21|0.92|6|keep?|sh% regress DOWN (19.8%->15.2%)|
 |43|Sean Walker|D|CAR|32|79|8|17|52|1|154|118|110|-3.09|0.88|6|||
@@ -163,7 +163,7 @@
 |52|William Eklund|LW/RW|OTT|24|77|21|44|30|19|193|61|51|-0.31|0.4|6||sh% regress UP (8.5%->10.7%); OVERRIDE 1.08: OTT top line w/ Stutzle filling Tkachuk void; team-conviction contract|
 |53|Bowen Byram|D|CHI|26|79|11|33|47|6|112|62|100|-3.72|0.25|6||OVERRIDE 1.1: CHI the-guy usage; PP1 with Bedard|
 |54|Pavel Dorofeyev|LW/RW|NYR|26|77|33|22|25|25|223|26|30|-0.46|0.25|6|||
-|55|Bo Horvat|C|NYI|32|74|29|27|31|13|222|67|38|-0.65|0.23|6|||
+|55|Bo Horvat|C|NYI|32|74|29|27|31|13|222|67|38|-0.65|0.23|6||A regress risk (A1 53% vs F avg 60%)|
 |56|Luke Hughes|D|NJD|23|72|9|36|27|17|164|20|57|-3.75|0.22|6||team-conviction contract|
 |57|Jeremy Lauzon|D|VGK|30|63|3|9|86|0|70|267|92|-3.76|0.21|6||sh% regress UP (1.4%->3.7%); GP risk|
 |58|Thomas Chabot|D|OTT|30|68|8|29|24|8|132|47|127|-3.81|0.16|6|||
