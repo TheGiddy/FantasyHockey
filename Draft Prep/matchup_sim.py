@@ -6,7 +6,8 @@ H2H weekly matchup Monte Carlo — values rosters by the game we actually play
 Pipeline:
   1. Rosters: keepers from the projections CSVs (either/or "keep?" groups
      resolved by vorp per the context file), remaining slots filled by a
-     need-aware snake draft (2025 order, keeper rounds + traded picks from
+     need-aware linear draft (same order every round; 2025 order, keeper
+     rounds + traded picks from
      sim_draft_quick, scripted goalie tendencies).
   2. Weekly means: per-game projected rates x that NHL team's games in each of
      the 28 fantasy weeks (schedule_20262027.csv), scaled by a per-category

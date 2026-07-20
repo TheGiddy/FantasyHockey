@@ -38,7 +38,7 @@
 
 ## H2H matchup simulator (2026-07-19)
 - `matchup_sim.py` — Monte Carlo of the actual game (weekly most-cats H2H), replacing the z-sum as the *decision* layer; the z/vorp pipeline still feeds it
-- Rosters: keepers from CSVs (either/or keep? groups resolved by vorp per context file) + need-aware vorp snake draft reusing sim_draft_quick's grid (2025 order, TD slot 7, traded picks, scripted goalie rounds; TD scripts G at the ER-slot R6/R8)
+- Rosters: keepers from CSVs (either/or keep? groups resolved by vorp per context file) + need-aware vorp **linear** draft (same order every round — league rule) reusing sim_draft_quick's grid (2025 order, TD slot 7, traded picks, scripted goalie rounds; TD scripts G at the ER-slot R6/R8)
 - Weekly means: per-game rates × NHL team games per fantasy week (28 wks from schedule module) × per-cat utilization calibrated so league-average weekly totals match 2024-25+2025-26 actual league weeks (util >1 = streaming uplift; W needs 1.9 — drafted rosters alone can't reproduce observed W volume)
 - Weekly noise: per-cat overdispersion (var/mean within team-season) from real weekly history (SOG φ=4.5, PIM/HIT φ=3.6 — far from Poisson); W/SHO Poisson (ties matter); SV% Normal with historical within-team weekly sd (0.025)
 - Candidate analysis uses common random numbers (same seed per candidate) so ranking differences are pure roster effects; refactored `sim_draft_quick.py` into main() so its constants import cleanly
