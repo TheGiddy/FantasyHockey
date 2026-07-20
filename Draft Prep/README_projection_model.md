@@ -36,6 +36,14 @@
 - Data notes: NHL stats API pages can duplicate rows at page boundaries (dedupe on playerId per season); TOI fields are seconds; MoneyPuck merges cleanly on NHL playerId
 - Findings vs v1: Hellebuyck fine (G4 overall — Yahoo list artifact); Carlsson's low format rank confirmed by data (no bangers); Gauthier/Cooley sh% regression is real (ixG well below goals)
 
+## H2H matchup simulator (2026-07-19)
+- `matchup_sim.py` — Monte Carlo of the actual game (weekly most-cats H2H), replacing the z-sum as the *decision* layer; the z/vorp pipeline still feeds it
+- Rosters: keepers from CSVs (either/or keep? groups resolved by vorp per context file) + need-aware vorp snake draft reusing sim_draft_quick's grid (2025 order, TD slot 7, traded picks, scripted goalie rounds; TD scripts G at the ER-slot R6/R8)
+- Weekly means: per-game rates × NHL team games per fantasy week (28 wks from schedule module) × per-cat utilization calibrated so league-average weekly totals match 2024-25+2025-26 actual league weeks (util >1 = streaming uplift; W needs 1.9 — drafted rosters alone can't reproduce observed W volume)
+- Weekly noise: per-cat overdispersion (var/mean within team-season) from real weekly history (SOG φ=4.5, PIM/HIT φ=3.6 — far from Poisson); W/SHO Poisson (ties matter); SV% Normal with historical within-team weekly sd (0.025)
+- Candidate analysis uses common random numbers (same seed per candidate) so ranking differences are pure roster effects; refactored `sim_draft_quick.py` into main() so its constants import cleanly
+- **First findings:** R1 for TD = Brady Tkachuk 53.4% / Seider 53.1% / McDavid 52.8% / MacKinnon 52.2% — the sim reverses the z-sum's MacKinnon-first call because TD's marginal cats are PIM/HIT/BLK (18-40% weekly win rates), not G/SOG (71-72%, already won). Goalie at R1 = −8-10% (never). Power ranking: Autodraft #1 (Wedgewood+Gustavsson keeper core), TD mid-pack at 51.6% *with* the goalie plan executed, PK last. Caveat: ASD projects goalie-less (no G keepers, few live picks) → their 99% W row overstates TD; they'll trade/stream in reality
+
 ## NHLe rookie module (2026-07-19)
 - Fills the model's biggest known hole: players with no NHL history (2026 draftees, junior-bound 2024/25 picks) are invisible to the per-60 pipeline — and they're where keeper value hides (Gauthier R19)
 - `fetch_prospects.py` — draft classes 2024-26 rounds 1-2 via api-web; resolves names→playerIds through the NHL search API (needs `requests`: Python's own CA store rejects search.d3.nhle.com), pulls club-league season totals from player landings → `data/prospect_meta.csv` + `prospect_stats.csv` (188/192 resolved; 4 misses are non-fantasy D/G)

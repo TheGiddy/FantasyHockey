@@ -36,47 +36,53 @@ def newest(p):
     a = p.replace(".csv","_new.csv")
     return a if os.path.exists(a) and os.path.getmtime(a) > os.path.getmtime(p) else p
 
-sk = pd.read_csv(newest("output/projections_v2_skaters.csv"))
-sk = sk[sk["kept"].isna()].sort_values("vorp", ascending=False)   # keep? = kept
-gl = pd.read_csv("output/projections_v2_goalies.csv")
-gl = gl[gl["kept"].isna()].sort_values("z", ascending=False)
 
-skaters = sk[["name","yahoo_pos","vorp","G","A","SOG","HIT","BLK"]].to_dict("records")
-goalies = gl[["name","team","W","sv_proj","starts_proj","z"]].to_dict("records")
-keep_sched = {t: sorted(KEEP_ROUNDS[t]) for t in ORDER}
+def main():
+    sk = pd.read_csv(newest("output/projections_v2_skaters.csv"))
+    sk = sk[sk["kept"].isna()].sort_values("vorp", ascending=False)   # keep? = kept
+    gl = pd.read_csv("output/projections_v2_goalies.csv")
+    gl = gl[gl["kept"].isna()].sort_values("z", ascending=False)
 
-td_log = []
-g_taken = {t: 0 for t in ORDER}
-for rnd in range(1, 21):     # 2026-27: 20-round draft (4D roster change)
-    for slot, slot_team in enumerate(ORDER, 1):
-        team = OWNER.get((rnd, slot), slot_team)
-        if rnd in keep_sched[team]:
-            keep_sched[team].remove(rnd)
-            continue                                    # keeper consumes pick
-        is_td = team == "TD"
-        take_g = ((team, rnd) in G_ROUNDS and g_taken[team] < 2) or \
-                 (is_td and (rnd, slot) in ((6,2),(8,2)))
-        if take_g and goalies:
-            g_taken[team] += 1
-            # TD's traded early slots (ER slot 2) used for goalies at R6/R8
-            pick = goalies.pop(0)
-            desc = f"G: {pick['name']} ({pick['team']}, {pick['W']}W, {pick['sv_proj']:.3f})"
-            alt = ", ".join(g["name"] for g in goalies[:3])
-        elif skaters:
-            pick = skaters.pop(0)
-            desc = (f"{pick['name']} ({pick['yahoo_pos']}, vorp {pick['vorp']:+.2f}, "
-                    f"{pick['SOG']} SOG/{pick['HIT']} HIT/{pick['BLK']} BLK)")
-            alt = ", ".join(f"{s['name']} {s['vorp']:+.1f}" for s in skaters[:4])
-        else:
-            continue
-        if is_td:
-            td_log.append((rnd, slot, desc, alt, ", ".join(
-                f"G{i+1}:{g['name']}" for i, g in enumerate(goalies[:2]))))
+    skaters = sk[["name","yahoo_pos","vorp","G","A","SOG","HIT","BLK"]].to_dict("records")
+    goalies = gl[["name","team","W","sv_proj","starts_proj","z"]].to_dict("records")
+    keep_sched = {t: sorted(KEEP_ROUNDS[t]) for t in ORDER}
 
-print("TWIN DADDY PICKS (2025 order assumed; keep? players treated as kept)\n")
-for rnd, slot, desc, alt, gtop in td_log:
-    print(f"R{rnd:>2} pick {slot}  ->  {desc}")
-    print(f"           next best: {alt}")
-    if rnd in (5, 6, 7, 8):
-        print(f"           top goalies left: {gtop}")
-    print()
+    td_log = []
+    g_taken = {t: 0 for t in ORDER}
+    for rnd in range(1, 21):     # 2026-27: 20-round draft (4D roster change)
+        for slot, slot_team in enumerate(ORDER, 1):
+            team = OWNER.get((rnd, slot), slot_team)
+            if rnd in keep_sched[team]:
+                keep_sched[team].remove(rnd)
+                continue                                    # keeper consumes pick
+            is_td = team == "TD"
+            take_g = ((team, rnd) in G_ROUNDS and g_taken[team] < 2) or \
+                     (is_td and (rnd, slot) in ((6,2),(8,2)))
+            if take_g and goalies:
+                g_taken[team] += 1
+                # TD's traded early slots (ER slot 2) used for goalies at R6/R8
+                pick = goalies.pop(0)
+                desc = f"G: {pick['name']} ({pick['team']}, {pick['W']}W, {pick['sv_proj']:.3f})"
+                alt = ", ".join(g["name"] for g in goalies[:3])
+            elif skaters:
+                pick = skaters.pop(0)
+                desc = (f"{pick['name']} ({pick['yahoo_pos']}, vorp {pick['vorp']:+.2f}, "
+                        f"{pick['SOG']} SOG/{pick['HIT']} HIT/{pick['BLK']} BLK)")
+                alt = ", ".join(f"{s['name']} {s['vorp']:+.1f}" for s in skaters[:4])
+            else:
+                continue
+            if is_td:
+                td_log.append((rnd, slot, desc, alt, ", ".join(
+                    f"G{i+1}:{g['name']}" for i, g in enumerate(goalies[:2]))))
+
+    print("TWIN DADDY PICKS (2025 order assumed; keep? players treated as kept)\n")
+    for rnd, slot, desc, alt, gtop in td_log:
+        print(f"R{rnd:>2} pick {slot}  ->  {desc}")
+        print(f"           next best: {alt}")
+        if rnd in (5, 6, 7, 8):
+            print(f"           top goalies left: {gtop}")
+        print()
+
+
+if __name__ == "__main__":
+    main()
